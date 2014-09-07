@@ -18,8 +18,8 @@ my $yacuna = {};
 my $config = {
 	yacuna => {
 		trader => {
-			apiTokenId => 'AAEAAAgfi0Nhdb0Vv9HvAR-KDhslWDKxmio_713Wa8ooThYrF-lY5di7',
-			apiSecret => '066baac200026f4c849e3d274bfc13a0'
+			apiTokenId => 'YOUR_YACUNA_API_TOKEN_ID',
+			apiSecret => 'YOUR_YACUNA_API_SECRET'
 		}
 	}
 };
@@ -43,8 +43,7 @@ sub run{
 		}
 	}
 	catch Error::Simple with{
-		my $E = shift;
-		dump($E);
+		dump(shift);
 	};
 	exit(0);
 }
@@ -108,10 +107,9 @@ sub placeOrders(){
 			print "\n ". $json->pretty->encode($json->decode($confirmed));
 		}
 		catch Error::Simple with{
-			print "\nERROR\n";
 			dump($result);
 			dump($confirmed);
-			dump(shift);
+			throw Error::Simple(shift);
 		};
 		sleep 1;
 	}
@@ -171,8 +169,18 @@ sub init{
 		skipSSL => 0
 	);
 
-	my $wallet = $json->decode(&getYacunaWallet(''))->{'wallet'};
-	$config->{'yacuna'}->{'trader'}->{'accounts'} = $wallet->{'accounts'};
+	my $result = {};
+	try{
+		$result = $json->decode(&getYacunaWallet(''));
+		if($result->{'status'} eq 'Error'){
+			dump $result;
+			throw Error::Simple($result);
+		}
+		$config->{'yacuna'}->{'trader'}->{'accounts'} = $result->{'wallet'}->{'accounts'};
+	}
+	catch Error::Simple with{
+		throw Error::Simple(shift);
+	};
 }
 
 
