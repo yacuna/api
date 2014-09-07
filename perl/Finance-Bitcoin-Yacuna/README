@@ -1,0 +1,49 @@
+NAME
+    Finance::Bitcoin::Yacuna - yacuna.com API connector
+
+VERSION
+    0.1
+
+SYNOPSIS
+     require Finance::Bitcoin::Yacuna;
+     $api = new Finance::Bitcoin::Yacuna;
+     $api->tokenId($tokenId);
+     $api->secret($secret);
+     $api->host($apiHost);
+     $result = $api->call($restPath, $httpMethod, [$arg1, $arg2, ..]);
+
+DESCRIPTION
+    Module to connect to the api of the currency exchange Yacuna.
+
+    Please see the Yacuna API documentation
+    <http://docs.yacuna.com/api> for a catalog of api methods.
+
+METHODS
+    $api = new Finance::Bitcoin::Yacuna
+        The constructor. Returns a "Finance::Bitcoin::Yacuna" object.
+
+    $api->uri($uri)
+        Sets or gets the uri to connect.
+
+    $api->tokenId($tokenId)
+        Sets or gets the API tokenId.
+
+    $api->secret($secret)
+        Sets or gets the API secret.
+
+    $result = $api->call($httpMethod, $restPath)
+    $result = $api->call($httpMethod, $restPath, [$param1, $param2, ..])
+        Calls the API method $restPath with the $httpMethod (with the given
+        $params, where applicable) and returns either undef or a JSON
+        string.
+
+DEPENDENCIES
+    WWW::Mechanize
+    JSON
+    HTTP::Request
+    MIME::Base64
+    Digest::SHA
+
+AUTHOR and COPYRIGHT
+    Copyright Andrei Martchouk <andrei at yacuna dot com>
+
