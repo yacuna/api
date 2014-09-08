@@ -153,7 +153,7 @@ sub createOrderYacuna(){
 	my($order) = @_;
 	print "\n Creating order $order->{'externalReferenceId'}";
 	my @params = map { $_.'='.$order->{$_} } keys %{$order};
-	return $yacuna->call('POST', 'order/create/'.$order->{'currency1'}.'/'.$order->{'currency1'}, [@params]);
+	return $yacuna->call('POST', 'order/create/'.$order->{'currency1'}.'/'.$order->{'currency2'}, [@params]);
 }
 
 sub getYacunaWallet(){
