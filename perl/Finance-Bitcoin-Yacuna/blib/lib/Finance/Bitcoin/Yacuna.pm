@@ -28,7 +28,7 @@ my $conf = {
 		apiVersion => '1'
 	},
 	sandbox => {
-		host => 'https://sandbox.yacuna.com',
+		host => 'https://test.yacuna.com',
 		basePath => '/api/',
 		apiVersion => '1'
 	},
