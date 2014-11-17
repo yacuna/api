@@ -18,11 +18,11 @@
 #     LICENSE => q[LGPL]
 #     NAME => q[Finance::Bitcoin::Yacuna]
 #     PM => { lib/Finance/Bitcoin/Yacuna.pm=>q[$(INST_LIB)/Finance/Bitcoin/Yacuna.pm] }
-#     PREREQ_PM => { HTTP::Request=>q[0], MIME::Base64=>q[0], WWW::Mechanize=>q[0], Digest::SHA=>q[0] }
+#     PREREQ_PM => { MIME::Base64=>q[0], Digest::SHA=>q[0], HTTP::Request=>q[0], WWW::Mechanize=>q[0] }
 #     TEST_REQUIRES => {  }
 #     VERSION_FROM => q[lib/Finance/Bitcoin/Yacuna.pm]
 #     clean => { FILES=>q[bogus] }
-#     dist => { SUFFIX=>q[gz], COMPRESS=>q[gzip -9f] }
+#     dist => { COMPRESS=>q[gzip -9f], SUFFIX=>q[gz] }
 
 # --- MakeMaker post_initialize section:
 
