@@ -49,9 +49,9 @@ sub new{
 
 	my $config = {};
 
-    $config = $params{'sandbox'} && (int$params{'sandbox'})>0 ? $conf->{'sandbox'} : $conf->{'prod'};
+	$config = $params{'sandbox'} && (int$params{'sandbox'})>0 ? $conf->{'sandbox'} : $conf->{'prod'};
 
-    $config->{debug} = $params{'debug'} && (int$params{'debug'})>0 ? $params{'debug'} : 0;
+	$config->{debug} = $params{'debug'} && (int$params{'debug'})>0 ? $params{'debug'} : 0;
 
 	bless{
 		'uri' => $config->{'host'}, 
@@ -61,7 +61,7 @@ sub new{
 		'secret'=> $params{'secret'}, 
 		'SKIP_SSL'=>$params{'skipSSL'},
 		'httpClient'=> $httpClient,
-        'debug' => $config->{debug}
+		'debug' => $config->{debug}
 	}, 
 	$type;
 }
@@ -106,11 +106,11 @@ sub call {
 		my $body = '';
 		if('GET' eq $httpMethod){
 			$restPath .= "?$qry" if defined $qry && '' ne $qry;
-            print "\n$httpMethod ". $self->{'uri'}.$self->{'basePath'}.$self->{'apiVersion'}.'/'.$restPath if $self->{'debug'} > 0;
+			print "\n$httpMethod ". $self->{'uri'}.$self->{'basePath'}.$self->{'apiVersion'}.'/'.$restPath if $self->{'debug'} > 0;
 		}
 		elsif('POST' eq $httpMethod){
 			$body = $qry;
-            print "\n$httpMethod ". $self->{'uri'}.$self->{'basePath'}.$self->{'apiVersion'}.'/'.$restPath."\n".$body if $self->{'debug'} > 0;
+			print "\n$httpMethod ". $self->{'uri'}.$self->{'basePath'}.$self->{'apiVersion'}.'/'.$restPath."\n".$body if $self->{'debug'} > 0;
 		}
 		
 		# authentication not needed for some public calls
