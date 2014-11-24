@@ -91,16 +91,21 @@ sub secret {
 	$_[0]->{'secret'} = $_[1]
 }
 
+sub debug {
+	return $_[0]->{'debug'} unless $_[1];
+	$_[0]->{'debug'} = $_[1]
+}
+
 sub call {
 	my $self = shift;
 	my $httpMethod = $_[0];
 	my $restPath = $_[1];
 
 	eval{
-		my $qry = defined $_[2]?(join "&", sort @{$_[2]}):undef;
+		my $qry = defined $_[2] && scalar @{$_[2]}>0 ? (join "&", sort @{$_[2]}):undef;
 		my $body = '';
 		if('GET' eq $httpMethod){
-			$restPath .= "?$qry" if defined $qry;
+			$restPath .= "?$qry" if defined $qry && '' ne $qry;
             print "\n$httpMethod ". $self->{'uri'}.$self->{'basePath'}.$self->{'apiVersion'}.'/'.$restPath if $self->{'debug'} > 0;
 		}
 		elsif('POST' eq $httpMethod){
@@ -110,7 +115,7 @@ sub call {
 		
 		# authentication not needed for some public calls
 		if(defined $self->{'secret'} && defined $self->{'tokenId'}){
-			my $apiToken = &prepareAuth($self->{'basePath'}.$self->{'apiVersion'}.'/'.$restPath, $body, $httpMethod, $self->{'secret'});
+			my $apiToken = &prepareAuth($self->{'basePath'}.$self->{'apiVersion'}.'/'.$restPath, $body, $httpMethod, $self->{'secret'}, $self->{'debug'});
 			$self->{'httpClient'}->add_header( 'Api-Token-Id' => $self->{'tokenId'}, 'Api-Token' => $apiToken, 'Api-Token-OTP'=>'');
 		}
 
@@ -130,11 +135,16 @@ sub call {
 }
 
 sub prepareAuth(){
-	my ($path, $body, $httpMethod, $apiSecret) = @_;
+	my ($path, $body, $httpMethod, $apiSecret, $debug) = @_;
 	my $tokenSalt = ''.time*1000;
 	my $hashInput = $tokenSalt.'@'.$apiSecret.'@'.$httpMethod.'@'.$path;
 	$hashInput .= '@'.$body if '' ne $body;
 	my $apiToken = $tokenSalt.'T'.(sha512_hex($hashInput));
+    
+    if(defined $debug && $debug > 0){
+        print "\nhashInput => $hashInput \n";
+        print "apiToken => $apiToken \n";
+    }
 
 	return $apiToken;
 }
