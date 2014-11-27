@@ -96,6 +96,11 @@ sub debug {
 	$_[0]->{'debug'} = $_[1]
 }
 
+sub SKIP_SSL {
+	return $_[0]->{'SKIP_SSL'} unless $_[1];
+	$_[0]->{'SKIP_SSL'} = $_[1]
+}
+
 sub call {
 	my $self = shift;
 	my $httpMethod = $_[0];
@@ -155,7 +160,7 @@ __END__
 
 =head1 NAME
 
-Finance::Bitcoin::Yacuna - yacuna.com api connector
+Finance::Bitcoin::Yacuna - yacuna.com API connector
 
 =head1 VERSION
 
@@ -164,8 +169,19 @@ Finance::Bitcoin::Yacuna - yacuna.com api connector
 =head1 SYNOPSIS
 
  use Finance::Bitcoin::Yacuna;
- $yacuna = Finance::Bitcoin::Yacuna->new($uri, $basePath, $tokenId, $secret, $SKIP_SSL);
- $result = $yacuna->call($httpMethod, $restPath, [$arg1, $arg2, ..]);
+
+ $yacuna = Finance::Bitcoin::Yacuna->new(
+	tokenId => $apiTokenId, 
+	secret => $apiSecret, 
+	apiVersion => 1
+ );
+
+ $result = $yacuna->call($httpMethod, $restPath, ["param1=$param1", "param2=$param2", ..]);
+
+ use Data::Dump qw(dump);
+ use JSON;
+ my $json = new JSON;
+ dump $json->decode($result);
 
 =head1 DESCRIPTION
 
@@ -181,15 +197,7 @@ Please see L<Yacuna API documentation|http://docs.yacuna.com/api> for a catalog 
 
 The constructor. Returns a C<Finance::Bitcoin::Yacuna> object.
 
-=item $yacuna->key($key)
-
-Sets or gets the API key.
-
-=item $yacuna->secret($secret)
-
-Sets the API secret to C<$secret> or returns the API secret base64 decoded.
-
-=item $result = $yacuna->call($httpMethod, $restPath, [$param1, $param2, ..]);
+=item $result = $yacuna->call($httpMethod, $restPath, ["param1=$param1", "param2=$param2", ..]);
 
 Calls the API method C<$restPath> (with the given C<$params>, where applicable) and returns either undef or a JSON string.
 

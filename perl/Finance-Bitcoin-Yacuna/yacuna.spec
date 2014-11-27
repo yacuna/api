@@ -10,6 +10,7 @@ Source0: http://search.cpan.org/CPAN/authors/id/P/PH/MARTCHOUK/%{rname}-%{versio
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch: noarch
 Requires: perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
+Requires: perl(Data::Dump)
 Requires: perl(HTTP::Request)
 Requires: perl(WWW::Mechanize)
 Requires: perl(MIME::Base64)
@@ -18,9 +19,9 @@ BuildRequires: perl(ExtUtils::MakeMaker) perl(Module::Build) perl(Test::Simple)
 
 
 %description
-This module allows to connect to the api of the bitcoin market Kraken.
+Perl connector module for the API of the bitcoin exchange Yacuna.
 
-Please see http://docs.yacuna.com/api for a catalog of api methods.
+Please see http://docs.yacuna.com/api for a catalog of all api methods.
 
 
 %prep
