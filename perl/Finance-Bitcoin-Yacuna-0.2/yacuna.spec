@@ -2,11 +2,11 @@
 Name: perl-%{rname}
 Version: 0.1
 Release: 1%{?dist}
-Summary: yacuna.com API connector module
+Summary: Yacuna Bitcoin exchange trading api connector
 License: LGPL
 Group: Development/Libraries
 URL: http://search.cpan.org/dist/%{rname}/
-Source0: http://search.cpan.org/CPAN/authors/id/P/PH/MARTCHOUK/%{rname}-%{version}.tar.gz
+Source0: http://search.cpan.org/CPAN/authors/id/M/MA/MARTCHOUK/%{rname}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch: noarch
 Requires: perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))

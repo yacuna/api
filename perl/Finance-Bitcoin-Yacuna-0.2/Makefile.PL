@@ -10,7 +10,7 @@ WriteMakefile(
 	'AUTHOR' => 'Andrei Martchouk <andrei@yacuna.com>',
 	'LICENSE' => 'LGPL',
 	'VERSION_FROM' => 'lib/Finance/Bitcoin/Yacuna.pm',
-	'ABSTRACT' => 'yacuna.com api connector',
+	'ABSTRACT' => 'Yacuna Bitcoin exchange trading api connector, s. http://docs.yacuna.com/api',
 	'PM' => {
 		'lib/Finance/Bitcoin/Yacuna.pm' => '$(INST_LIB)/Finance/Bitcoin/Yacuna.pm'
 	},

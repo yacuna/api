@@ -170,10 +170,13 @@ Finance::Bitcoin::Yacuna - yacuna.com API connector
 
  use Finance::Bitcoin::Yacuna;
 
- $yacuna = Finance::Bitcoin::Yacuna->new(
+ my $yacuna = Finance::Bitcoin::Yacuna->new(
 	tokenId => $apiTokenId, 
 	secret => $apiSecret, 
-	apiVersion => 1
+	apiVersion => 1, # optional, default:1
+	debug => 0, # optional, default:0
+	skipSSL => 0, # optional, default:0
+	sandbox => 0 # optional, default:0
  );
 
  $result = $yacuna->call($httpMethod, $restPath, ["param1=$param1", "param2=$param2", ..]);
@@ -193,7 +196,14 @@ Please see L<Yacuna API documentation|http://docs.yacuna.com/api> for a catalog 
 
 =over 4
 
-=item $yacuna = Finance::Bitcoin::Yacuna->new($uri, $basePath, $tokenId, $secret, $SKIP_SSL)
+=item $yacuna = Finance::Bitcoin::Yacuna->new(
+	tokenId => $apiTokenId, 
+	secret => $apiSecret, 
+	apiVersion => 1, # optional, default:1
+	debug => 0, # optional, default:0
+	skipSSL => 0, # optional, default:0
+	sandbox => 0 # optional, default:0
+ );
 
 The constructor. Returns a C<Finance::Bitcoin::Yacuna> object.
 
