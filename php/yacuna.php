@@ -33,8 +33,8 @@ class YacunaAPI
         $this->secret = $secret;
         $this->url = $url;
         $this->version = $version;
-	$this->basePath = $basePath;
-	$this->debug = $debug;
+	    $this->basePath = $basePath;
+	    $this->debug = $debug;
         $this->curl = curl_init();
         curl_setopt_array($this->curl, array(
             CURLOPT_SSL_VERIFYPEER => $sslverify,
@@ -53,27 +53,27 @@ class YacunaAPI
 
     /**
      */
-    function Call($httpMethod, $restPath, array $request = array()) {
+    function Call($httpMethod, $restPath, array $request = array('')) {
         $qry = http_build_query($request, '', '&');
-	$body = '';
-	if(isset($httpMethod) && $httpMethod == 'GET'){
-		if(isset($qry)){ $restPath .= "?$qry"; }
-	}
-	else if(isset($httpMethod) && $httpMethod == 'POST'){
-		$body = $qry;
-		if($this->debug){ print_r($body . "\n"); }
-	}
+	    $body = '';
+	    if(isset($httpMethod) && $httpMethod == 'GET'){
+		    if(isset($qry)){ $restPath .= "?$qry"; }
+	    }
+	    else if(isset($httpMethod) && $httpMethod == 'POST'){
+		    $body = $qry;
+		    if($this->debug){ print_r($body . "\n"); }
+	    }
 
         $path = $this->basePath . $this->version . '/' . $restPath;
-	$tokenSalt = $this->millitime();
-	$hashInput = $tokenSalt.'@'.$this->secret.'@'.$httpMethod.'@'.$path;
-	if($body != ''){ $hashInput .= '@'.$body; }
-	$sign = $tokenSalt.'T'.(hash('sha512', $hashInput));
+	    $tokenSalt = $this->millitime();
+    	$hashInput = $tokenSalt.'@'.$this->secret.'@'.$httpMethod.'@'.$path;
+	    if($body != ''){ $hashInput .= '@'.$body; }
+    	$sign = $tokenSalt.'T'.(hash('sha512', $hashInput));
 
-	if($this->debug){
-		print_r($hashInput . "\n");
-		print_r($sign . "\n");
-	}
+    	if($this->debug){
+	    	print_r($hashInput . "\n");
+		    print_r($sign . "\n");
+    	}
 	
         $headers = array(
             'Api-Token-Id: ' . $this->tokenId,
@@ -83,10 +83,10 @@ class YacunaAPI
         // make request
         curl_setopt($this->curl, CURLOPT_URL, $this->url . $path);
         curl_setopt($this->curl, CURLOPT_HTTPHEADER, $headers);
-	if($httpMethod == 'POST'){
-		curl_setopt($this->curl, CURLOPT_POST, true);
+	    if($httpMethod == 'POST'){
+		    curl_setopt($this->curl, CURLOPT_POST, true);
         	curl_setopt($this->curl, CURLOPT_POSTFIELDS, $body);
-	}
+    	}
         $result = curl_exec($this->curl);
         if($result===false)
             throw new yacunaAPIException('CURL error: ' . curl_error($this->curl));

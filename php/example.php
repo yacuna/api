@@ -3,19 +3,22 @@ require_once 'yacuna.php';
 // your api credentials
 $tokenId = 'YOUR_API_TOKEN_ID';
 $secret = 'YOUR_API_SECRET';
-// set which platform to use (sandbox or production)
-$sandbox = true; 
-$url = $sandbox ? 'https://sandbox.yacuna.com' : 'https://yacuna.com';
-$basePath = '/api/';
+$sandbox = false; // set which platform to use (sandbox or production)
 $sslverify = true;
 $version = 1;
 $debug = false;
+
+$url = $sandbox ? 'https://sandbox.yacuna.com' : 'https://yacuna.com';
+$basePath = '/api/';
 $yacuna = new \Yacuna\YacunaAPI($tokenId, $secret, $url, $version, $sslverify, $basePath, $debug);
 
 $wallet = $yacuna->Call('GET', 'wallet/get', ['currency'=>'EUR']);
 print_r($wallet);
 
-$order = array( 
+//getOrders($wallet->wallet->accounts[0]->walletAccountId);
+getDeals($wallet->wallet->accounts[0]->walletAccountId);
+
+$ordr = array( 
 	'walletAccountId' => $wallet->wallet->accounts[0]->walletAccountId,
 	'externalReferenceId' => 'olala.'.microtime(true),
 	'currency1' => 'EUR',
@@ -29,25 +32,34 @@ $order = array(
 	'priceLimitCurrency' => 'EUR'
 );
 
-ksort($order);
-print_r($order);
-#exit;
+function placeOrder($order){
+    global $yacuna;
+    ksort($order);
+    print_r($order);
+    
+    // Create Order
+    $res = $yacuna->Call('POST', 'order/create/'.$order['currency1'].'/'.$order['currency2'], $order);
+    print_r($res);
 
-// Create Order
-#$res = $yacuna->Call('POST', 'order/create/'.$order['currency1'].'/'.$order['currency2'], $order);
-#print_r($res);
+    // Confirm Order
+    $res = $yacuna->Call('POST', 'order/confirm/'.$res->tradeOrder->id, ['orderId'=>$res->tradeOrder->id]);
+    print_r($res);
+    return $res;
+}
 
-// Confirm Order
-#$res = $yacuna->Call('POST', 'order/confirm/'.$res->tradeOrder->id, ['orderId'=>$res->tradeOrder->id]);
-#print_r($res);
+function getOrders($walletAccountId){
+    // Fetch my orders in status 'Confirmed'
+    $res = $yacuna->Call('GET', 'order/list', ['walletAccountId'=>$walletAccountId, 'tradeOrderStatus'=>'Confirmed', 'count'=>1000]);
+    //print_r($res->tradeOrders);
 
-// Fetch my orders in status 'Confirmed'
-$res = $yacuna->Call('GET', 'order/list', ['walletAccountId'=>$wallet->wallet->accounts[0]->walletAccountId, 'tradeOrderStatus'=>'Confirmed', 'count'=>1000]);
-//print_r($res->tradeOrders);
+    foreach ($res->tradeOrders as $order) {
+	    print_r($order->id . "\n");
+    }
+}
 
-foreach ($res->tradeOrders as $order) {
-	print_r("Canceling order # " . $order->id . " ");
-	$res = $yacuna->Call('POST', 'order/cancel/'.$order->id, ['orderId'=>$order->id]);
-	print_r($res->tradeOrder->tradeOrderMarketStatus . "\n");
+function getDeals($walletAccountId){
+    global $yacuna;
+    $res = $yacuna->Call('GET', 'deal/list', ['walletAccountId'=>$walletAccountId, 'count'=>1000, 'sorting'=>'+CreationDateTime|+Id']);
+    print_r($res);
 }
 
